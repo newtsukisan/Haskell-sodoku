@@ -21,6 +21,9 @@ tests = [
            , testCase "Solucion real"          test_isSolution_1     -- must be true
            , testCase "Se repiten una cifra"   test_isSolution_2     -- must be false
            , testCase "Tiene un cero"          test_isSolution_3     -- must be false
+           , testCase "bd1 debe ser valido"    test_isValid_0        -- must be true
+           , testCase "bd1 debe ser valido"    test_isValid_1
+           , testCase "bd1 debe ser valido"    test_isValid_2
            , testCase "Counting well" $ length vacio @?= 81          -- verification 
            , testCase "First element" $ vacio !!  0 @?=  0           -- verification
            , testCase "one element" $ sol_bd1 !!  8 @?=  5           -- verification
@@ -34,21 +37,35 @@ tests = [
            , testCase "obtener index" $ getIndex 0 4 @?=  4          -- zero must be accounting
            , testCase "obtener elementos" test_getElement_0          -- zero must be accounting  
            , testCase "obtener elementos" test_getElement_1          -- zero must be accounting
-           , testCase "obtener elementos" test_getElement_2          -- zero must be accounting              
+           , testCase "obtener elementos" test_getElement_2          -- zero must be accounting 
+           , testCase "obtener elementos" test_getCols_0             -- selecting columns of the structure             
            , testProperty "Reciprocidad" prop_testing_Index
+           , testCase "areEquals" test_areEaquals_0
+           , testCase "areEquals" test_areEaquals_1
+           , testCase "areEquals" test_areEaquals_2                     
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.
-test_isSolution_1 = isSolution sol_bd1 @?=     True
-test_isSolution_2 = isSolution no_sol_bd1 @?=  False 
+test_isSolution_1 = isSolution sol_bd1     @?=  True
+test_isSolution_2 = isSolution no_sol_bd1  @?=  False 
 test_isSolution_3 = isSolution no_sol2_bd1 @?= False
+test_isValid_0    = isValid bd1            @?= True
+test_isValid_1    = isValid sol_bd1        @?= True
+test_isValid_2    = isValid no_sol_bd1     @?= False
+-- Test for getting elements
 test_getElement_0 = getElement sol_bd1 0 0 @?= 2
 test_getElement_1 = getElement sol_bd1 8 8 @?= 6 
-test_getElement_2 = getElement sol_bd1 1 4 @?= 2 
+test_getElement_2 = getElement sol_bd1 1 4 @?= 2
+-- Testing get columns of a soduku representation
+test_getCols_0   = getCols sol_bd1   @?= columnas_sol_bd1
+--Testing are equals
+test_areEaquals_0 = areEquals [1..10]           @?= True
+test_areEaquals_1 = areEquals [1,3,4,6,6,6,2,0] @?= False
+test_areEaquals_2 = areEquals [1,3,3,4,6,6,2,0] @?= False 
 
--- propiedades 
+-- properties
 prop_testing_Index n = 
-    not (n < 0) ==>      -- valores no negativos
+     (n >= 0) ==>      -- valores no negativos
      getIndex (getRindex n) (getCindex n) == n
        where types = (n::Int)   
 
