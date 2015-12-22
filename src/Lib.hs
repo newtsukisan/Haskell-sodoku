@@ -71,3 +71,26 @@ getCols  :: Soduku -> [Cols]
 getCols sdk = map get [0..8]
     where parejas = zip sdk (map getCindex [0..80]) 
           get n   = [ele |(ele, col) <- parejas, col == n] 
+
+
+-- from a initial sodoku we must refill the 0 with numbers.
+-- first creation simple sustitution with any other checking
+-- get elements which are zero.
+-- get rows of that elements.
+-- only once get posibilities of that columns
+-- try in zero position one of the posibilities.
+-- for that taking into account only valids ones (poda)
+nextStep :: Soduku -> [Soduku]
+nextStep sdk = [[]]
+      where indexes = getZeroIndexes sdk
+            
+-- get index of elements which are zero values.
+getZeroIndexes :: Soduku -> [Int]
+getZeroIndexes sdk = [index | (ele,index) <- zip sdk [1..], ele == 0]
+
+-- [1,0,0,5,0,0,0,9,0] -> todas las posibilidades que son los numeros que podríamos poner en los ceros
+-- 2 3 4 6 7 8 
+--getPosibilities :: [Int] -> [Int]
+getPosibilities fila = [index | (b,index)<-zip booleans [1..9], b == True]
+	where distinct n = map (/=n) (filter (/=0) fila)
+	      booleans   = map (all (==True))  (map distinct [1..9]) 

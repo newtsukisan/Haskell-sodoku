@@ -42,7 +42,9 @@ tests = [
            , testProperty "Reciprocidad" prop_testing_Index
            , testCase "areEquals" test_areEaquals_0
            , testCase "areEquals" test_areEaquals_1
-           , testCase "areEquals" test_areEaquals_2                     
+           , testCase "areEquals" test_areEaquals_2 
+           , testCase "indexes of cero elements" test_getZeroIndexes_0
+           , testCase "indexes of cero elements" test_getPosibilities_0                    
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.
@@ -62,7 +64,10 @@ test_getCols_0   = getCols sol_bd1   @?= columnas_sol_bd1
 test_areEaquals_0 = areEquals [1..10]           @?= True
 test_areEaquals_1 = areEquals [1,3,4,6,6,6,2,0] @?= False
 test_areEaquals_2 = areEquals [1,3,3,4,6,6,2,0] @?= False 
-
+--testing getZeroIndexes 
+test_getZeroIndexes_0 = getZeroIndexes [1,2,0,0,9] @?= [3,4]
+--testing posibilities
+test_getPosibilities_0 = getPosibilities ((getRows bd1) !! 1) @?= [2,3,4,6,7,8] 
 -- properties
 prop_testing_Index n = 
      (n >= 0) ==>      -- valores no negativos
