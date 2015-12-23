@@ -50,7 +50,12 @@ tests = [
            , testCase "set other Element" $ setElement 1 [1..5] 111 @?= [1,111,3,4,5]  -- second element
            , testCase "nextStep simple  " $ nextStep [1,3,3,4,6,6,2,0] @?= []          -- no valids
            , testCase "nextStep simple 2" $ nextStep [1,2,3,4,5,6,7,8,0] @?= [[1,2,3,4,5,6,7,8,9]]          -- no valids
-           , testCase "nextStep one step ahead"  $ nextStep pre_sol_bd1_0  @?= [sol_bd1]
+           , testCase "nextStep one step ahead"  $ nextStep pre_sol_bd1_0  @?= [sol_bd1] 
+           , testCase "get comunes"              $ getCommons [2,3,4] [1,3,5]  @?= [3]
+           , testCase "no hay comunes "          $ getCommons [1..11] [12..23]  @?= []
+           , testCase "solo un final comun"      $ getCommons [1..11] [11..23]  @?= [11]
+           , testCase "posibles values "         $ getRealPosibles  0 pre_sol_bd1_0  @?= [2]
+           , testCase "posibles values "         $ getRealPosibles 33 pre_sol_bd1_2  @?= [7]            
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.

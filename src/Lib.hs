@@ -97,8 +97,18 @@ nextStep1 sdk  = [sodoku
                  | x  <- [1..9]                         -- posibles substituions   
                  , let sodoku = setElement index sdk x  -- substitution of possible values
                  , isValid sodoku                       -- filtering, only valids ones
-               ] 
-     where index = head $ getZeroIndexes sdk 
+               ]                                        -- end list comprehensions
+     where index = head $ getZeroIndexes sdk            -- index for looking up
+
+-- Only take one element of all which are zero.
+nextStep2 :: Soduku -> [Soduku]
+nextStep2 sdk  = [sodoku 
+                 | x  <- [1..9]                         -- posibles substituions   
+                 , let sodoku = setElement index sdk x  -- substitution of possible values
+                 , isValid sodoku                       -- filtering, only valids ones
+               ]                                        -- end list comprehensions
+     where index = head $ getZeroIndexes sdk            -- index for looking up 
+
 
 -- taking a list of sodukus for each one:
 -- create nextStep.
@@ -109,6 +119,7 @@ nextStep1 sdk  = [sodoku
 solve sodokus solutions 
    | solutions /= []  = solutions
    | hasZeros sodokus = solve nextGeneration sols
+   | sodokus == []    = []
    where  nextGeneration = concat [ nextStep sdk | sdk <-sodokus]
           sols           = filter isSolution nextGeneration
           hasZeros  sdks = any (==True) $ map (any (==0)) sdks
@@ -122,6 +133,7 @@ solve sodokus solutions
 solve' sodokus solutions 
    | solutions /= []  = solutions
    | hasZeros sodokus = solve nextGeneration sols
+   | sodokus == []    = []  
    where  nextGeneration = concat [ nextStep1 sdk | sdk <-sodokus]
           sols           = filter isSolution nextGeneration
           hasZeros  sdks = any (==True) $ map (any (==0)) sdks
@@ -154,4 +166,19 @@ putSodoku (x:xs) = do
 --getPosibilities :: [Int] -> [Int]
 getPosibilities fila = [index | (b,index)<-zip booleans [1..9], b == True]
    where distinct n = map (/=n) (filter (/=0) fila)
-         booleans   = map (all (==True))  (map distinct [1..9]) 
+         booleans   = map (all (==True))  (map distinct [1..9])
+-- Each element which is zero, has a column and a row. In each of them, if there are numbers
+-- the possibles selections could be the ones not in row and not in column
+-- elements in that row
+-- elements in that column.
+-- [2,3,4] [1,3,5]  la única eleccion es aquella que está en ambas.
+getCommons posFilas posCols = [p | p <- posCols, isIn p] 
+     where isIn n = elem n posFilas
+-- getPosibilities of an element which is zero
+getRealPosibles index sodoku = getCommons posiblesRow  posiblesCol
+    where cols_index  = getCindex index              -- column index of the element
+          rows_index  = getRindex index              -- row index    of the element
+          row         = getRows sodoku !! rows_index -- row
+          col         = getCols sodoku !! cols_index -- col
+          posiblesRow = getPosibilities row          -- posibles values looking at row
+          posiblesCol = getPosibilities col          -- posibles values looking at col
