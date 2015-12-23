@@ -55,7 +55,9 @@ tests = [
            , testCase "no hay comunes "          $ getCommons [1..11] [12..23]  @?= []
            , testCase "solo un final comun"      $ getCommons [1..11] [11..23]  @?= [11]
            , testCase "posibles values "         $ getRealPosibles  0 pre_sol_bd1_0  @?= [2]
-           , testCase "posibles values "         $ getRealPosibles 33 pre_sol_bd1_2  @?= [7]            
+           , testCase "posibles values "         $ getRealPosibles 33 pre_sol_bd1_2  @?= [7]
+           , testCase "Minimal solution "        test_Solution_0   
+           , testCase "Minimal solution "        test_Solution_1          
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.
@@ -78,7 +80,10 @@ test_areEaquals_2 = areEquals [1,3,3,4,6,6,2,0] @?= False
 --testing getZeroIndexes 
 test_getZeroIndexes_0 = getZeroIndexes [1,2,0,0,9] @?= [2,3]
 --testing posibilities
-test_getPosibilities_0 = getPosibilities ((getRows bd1) !! 1) @?= [2,3,4,6,7,8] 
+test_getPosibilities_0 = getPosibilities ((getRows bd1) !! 1) @?= [2,3,4,6,7,8]
+--testing basic solutions 
+test_Solution_0 = (solve' [pre_sol_bd1_0] []) @?= [sol_bd1]
+test_Solution_1 = (solve' [pre_sol_bd1_2] []) @?= [sol_bd1]  
 -- properties
 prop_testing_Index n = 
      (n >= 0) ==>      -- valores no negativos

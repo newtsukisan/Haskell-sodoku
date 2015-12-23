@@ -103,12 +103,12 @@ nextStep1 sdk  = [sodoku
 -- Only take one element of all which are zero.
 nextStep2 :: Soduku -> [Soduku]
 nextStep2 sdk  = [sodoku 
-                 | x  <- [1..9]                         -- posibles substituions   
-                 , let sodoku = setElement index sdk x  -- substitution of possible values
-                 , isValid sodoku                       -- filtering, only valids ones
-               ]                                        -- end list comprehensions
-     where index = head $ getZeroIndexes sdk            -- index for looking up 
-
+                 | x  <- posibles                           -- posibles substituions   
+                 , let sodoku = setElement index sdk x      -- substitution of possible values
+                 , isValid sodoku                           -- filtering, only valids ones
+               ]                                            -- end list comprehensions
+     where index = head $ getZeroIndexes sdk                -- index for looking up 
+           posibles = getRealPosibles index sdk             -- posibles     
 
 -- taking a list of sodukus for each one:
 -- create nextStep.
@@ -134,7 +134,7 @@ solve' sodokus solutions
    | solutions /= []  = solutions
    | hasZeros sodokus = solve nextGeneration sols
    | sodokus == []    = []  
-   where  nextGeneration = concat [ nextStep1 sdk | sdk <-sodokus]
+   where  nextGeneration = concat [ nextStep2 sdk | sdk <-sodokus]
           sols           = filter isSolution nextGeneration
           hasZeros  sdks = any (==True) $ map (any (==0)) sdks
             
