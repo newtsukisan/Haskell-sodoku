@@ -80,14 +80,26 @@ getCols sdk = map get [0..8]
 -- only once get posibilities of that columns
 -- try in zero position one of the posibilities.
 -- for that taking into account only valids ones (poda)
--- nextStep :: Soduku -> [Soduku]
+nextStep :: Soduku -> [Soduku]
 nextStep sdk = [sodoku 
                  | index <- indexes                     -- where we have zeros
                  , x     <- [1..9]                      -- posibles substituions
                  , let sodoku = setElement index sdk x  -- substitution of possible values
                  , isValid sodoku                       -- filtering, only valids ones
                ]
-      where indexes = getZeroIndexes sdk
+      where indexes = getZeroIndexes sdk 
+-- taking a list of sodukus for each one:
+-- create nextStep.
+-- Check if any one is solution
+-- Finish when we have a solution
+-- Finish when empty if no solution
+-- Finish when no more empty sodokus
+solve sodokus solutions 
+   | solutions /= []  = solutions
+   | hasZeros sodokus = solve nextGeneration sols
+   where  nextGeneration = concat [ nextStep sdk | sdk <-sodokus]
+          sols           = filter isSolution nextGeneration
+          hasZeros  sdks = any (==True) $ map (any (==0)) sdks
             
 -- given index sdk structure and new value 
 -- obtain a new sdk structure with that value in specific position
@@ -98,6 +110,19 @@ setElement n sdk x  = (take n sdk) ++ [x] ++ (drop (n + 1) sdk )
 -- get index of elements which are zero values.
 getZeroIndexes :: Soduku -> [Int]
 getZeroIndexes sdk = [index | (ele,index) <- zip sdk [0..], ele == 0]
+
+-- print Sodoku
+printSodokus []         = return ()        
+printSodokus (sdk:sdks) = do
+    print "imprimiendo ....." 
+    printSodoku  sdk
+    printSodokus sdks
+printSodoku sodoku =  putSodoku $ getRows sodoku 
+putSodoku [] = return ()
+putSodoku (x:xs) = do
+    print x
+    putSodoku xs
+
 
 -- [1,0,0,5,0,0,0,9,0] -> todas las posibilidades que son los numeros que podríamos poner en los ceros
 -- 2 3 4 6 7 8 

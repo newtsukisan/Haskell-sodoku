@@ -47,7 +47,10 @@ tests = [
            , testCase "indexes of cero elements 1" test_getPosibilities_0
            , testCase "set first Element" $ setElement 0 [1..5] 111 @?= [111,2,3,4,5]  -- index zero
            , testCase "set last Element"  $ setElement 4 [1..5] 111 @?= [1,2,3,4,111]  -- index less than 
-           , testCase "set other Element" $ setElement 1 [1..5] 111 @?= [1,111,3,4,5]  -- second element         
+           , testCase "set other Element" $ setElement 1 [1..5] 111 @?= [1,111,3,4,5]  -- second element
+           , testCase "nextStep simple  " $ nextStep [1,3,3,4,6,6,2,0] @?= []          -- no valids
+           , testCase "nextStep simple 2" $ nextStep [1,2,3,4,5,6,7,8,0] @?= [[1,2,3,4,5,6,7,8,9]]          -- no valids
+           , testCase "nextStep one step ahead"  $ nextStep pre_sol_bd1_0  @?= [sol_bd1]
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.
@@ -76,10 +79,6 @@ prop_testing_Index n =
      (n >= 0) ==>      -- valores no negativos
      getIndex (getRindex n) (getCindex n) == n
        where types = (n::Int)   
-
-
-
-
 
 
 -- propiedad de prueba
