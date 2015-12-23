@@ -80,6 +80,8 @@ getCols sdk = map get [0..8]
 -- only once get posibilities of that columns
 -- try in zero position one of the posibilities.
 -- for that taking into account only valids ones (poda)
+-- podríamos sustituir solo uno de los valores de los ceros. 
+-- De momento todos parecen conducir al mismo.
 nextStep :: Soduku -> [Soduku]
 nextStep sdk = [sodoku 
                  | index <- indexes                     -- where we have zeros
@@ -88,6 +90,16 @@ nextStep sdk = [sodoku
                  , isValid sodoku                       -- filtering, only valids ones
                ]
       where indexes = getZeroIndexes sdk 
+
+-- Only take one element of all which are zero.
+nextStep1 :: Soduku -> [Soduku]
+nextStep1 sdk  = [sodoku 
+                 | x  <- [1..9]                         -- posibles substituions   
+                 , let sodoku = setElement index sdk x  -- substitution of possible values
+                 , isValid sodoku                       -- filtering, only valids ones
+               ] 
+     where index = head $ getZeroIndexes sdk 
+
 -- taking a list of sodukus for each one:
 -- create nextStep.
 -- Check if any one is solution
@@ -98,6 +110,19 @@ solve sodokus solutions
    | solutions /= []  = solutions
    | hasZeros sodokus = solve nextGeneration sols
    where  nextGeneration = concat [ nextStep sdk | sdk <-sodokus]
+          sols           = filter isSolution nextGeneration
+          hasZeros  sdks = any (==True) $ map (any (==0)) sdks
+
+-- taking a list of sodukus for each one:
+-- create nextStep.
+-- Check if any one is solution
+-- Finish when we have a solution
+-- Finish when empty if no solution
+-- Finish when no more empty sodokus
+solve' sodokus solutions 
+   | solutions /= []  = solutions
+   | hasZeros sodokus = solve nextGeneration sols
+   where  nextGeneration = concat [ nextStep1 sdk | sdk <-sodokus]
           sols           = filter isSolution nextGeneration
           hasZeros  sdks = any (==True) $ map (any (==0)) sdks
             
