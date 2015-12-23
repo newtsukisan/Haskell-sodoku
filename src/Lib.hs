@@ -26,7 +26,7 @@ duplas t@(x:ys)  = dupla_0 t ++ duplas ys
 -- is a solution when all ciphers are diferents of zero, (no empty values)
 isSolution :: Soduku -> Bool
 isSolution sdk = noempty && isValid sdk
-    where noempty      = (length $ filter (== 0) sdk) == 0
+    where noempty      = (length $ filter (== 0) sdk) == 0  -- no elements equals zero
 
 
 -- Is it a valid soduku, could be a transition or a final solution
@@ -80,17 +80,28 @@ getCols sdk = map get [0..8]
 -- only once get posibilities of that columns
 -- try in zero position one of the posibilities.
 -- for that taking into account only valids ones (poda)
-nextStep :: Soduku -> [Soduku]
-nextStep sdk = [[]]
+-- nextStep :: Soduku -> [Soduku]
+nextStep sdk = [sodoku 
+                 | index <- indexes                     -- where we have zeros
+                 , x     <- [1..9]                      -- posibles substituions
+                 , let sodoku = setElement index sdk x  -- substitution of possible values
+                 , isValid sodoku                       -- filtering, only valids ones
+               ]
       where indexes = getZeroIndexes sdk
             
+-- given index sdk structure and new value 
+-- obtain a new sdk structure with that value in specific position
+setElement :: Int -> Soduku -> Int -> Soduku      
+setElement n sdk x  = (take n sdk) ++ [x] ++ (drop (n + 1) sdk )
+
+       
 -- get index of elements which are zero values.
 getZeroIndexes :: Soduku -> [Int]
-getZeroIndexes sdk = [index | (ele,index) <- zip sdk [1..], ele == 0]
+getZeroIndexes sdk = [index | (ele,index) <- zip sdk [0..], ele == 0]
 
 -- [1,0,0,5,0,0,0,9,0] -> todas las posibilidades que son los numeros que podríamos poner en los ceros
 -- 2 3 4 6 7 8 
 --getPosibilities :: [Int] -> [Int]
 getPosibilities fila = [index | (b,index)<-zip booleans [1..9], b == True]
-	where distinct n = map (/=n) (filter (/=0) fila)
-	      booleans   = map (all (==True))  (map distinct [1..9]) 
+   where distinct n = map (/=n) (filter (/=0) fila)
+         booleans   = map (all (==True))  (map distinct [1..9]) 

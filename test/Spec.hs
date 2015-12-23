@@ -43,8 +43,11 @@ tests = [
            , testCase "areEquals" test_areEaquals_0
            , testCase "areEquals" test_areEaquals_1
            , testCase "areEquals" test_areEaquals_2 
-           , testCase "indexes of cero elements" test_getZeroIndexes_0
-           , testCase "indexes of cero elements" test_getPosibilities_0                    
+           , testCase "indexes of cero elements 0" test_getZeroIndexes_0
+           , testCase "indexes of cero elements 1" test_getPosibilities_0
+           , testCase "set first Element" $ setElement 0 [1..5] 111 @?= [111,2,3,4,5]  -- index zero
+           , testCase "set last Element"  $ setElement 4 [1..5] 111 @?= [1,2,3,4,111]  -- index less than 
+           , testCase "set other Element" $ setElement 1 [1..5] 111 @?= [1,111,3,4,5]  -- second element         
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.
@@ -65,7 +68,7 @@ test_areEaquals_0 = areEquals [1..10]           @?= True
 test_areEaquals_1 = areEquals [1,3,4,6,6,6,2,0] @?= False
 test_areEaquals_2 = areEquals [1,3,3,4,6,6,2,0] @?= False 
 --testing getZeroIndexes 
-test_getZeroIndexes_0 = getZeroIndexes [1,2,0,0,9] @?= [3,4]
+test_getZeroIndexes_0 = getZeroIndexes [1,2,0,0,9] @?= [2,3]
 --testing posibilities
 test_getPosibilities_0 = getPosibilities ((getRows bd1) !! 1) @?= [2,3,4,6,7,8] 
 -- properties
