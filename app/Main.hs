@@ -25,4 +25,4 @@ pre_sol_bd1_2 = [
           , 8,1,7,3,4,9,5,2,6 ]      :: Soduku    
 
 main :: IO ()
-main = printSodokus $ solutions bd1
+main = printSodoku $ solve_Recursion bd1
