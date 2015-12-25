@@ -1,4 +1,5 @@
 module Lib
+
  where
 
 --import Data.Set (Set)
@@ -33,18 +34,18 @@ isSolution sdk = noempty && isValid sdk
 -- without zeros all elements in a sodoku must be diferent in each row and in each column
 isValid :: Soduku -> Bool
 isValid sdk =  rowsWell && colsWell
-  where rowsWell =  all (==True) $  map areEquals rows   -- in all rows elements are diferents
-        colsWell =  all (==True) $  map areEquals cols   -- in all colums elements are diferents
+  where rowsWell =  all (==True) $  map notEquals rows   -- in all rows elements are diferents
+        colsWell =  all (==True) $  map notEquals cols   -- in all colums elements are diferents
         rows     = map (filter (/=0)) (getRows sdk)      -- taking off zeros
         cols     = map (filter (/=0)) (getCols sdk)      -- taking off zeros
 
 -- Check if all elements of a list are diferents
 areEquals :: [Int] -> Bool
-areEquals [x]   = True                       -- only an element, no problem
+areEquals [x]   = True                                                        -- only an element, no problem
 areEquals lista = (length $ filter (\ [x,y] -> x == y) $ duplas lista) == 0   -- more than one element
 -- negate areEquals for simplicity
 notEquals  :: [Int] -> Bool
-notEquals lista = not $ areEquals lista
+notEquals lista = areEquals lista
 -- Obtain col and row index from index of list
 getRindex :: Index -> Row
 getRindex index  = index `div` 9
@@ -107,7 +108,7 @@ nextStep2 sdk  = [sodoku
                  , let sodoku = setElement index sdk x      -- substitution of possible values
                  , isValid sodoku                           -- filtering, only valids ones
                ]                                            -- end list comprehensions
-     where index = head $ getZeroIndexes sdk                -- index for looking up 
+     where index    = head $ getZeroIndexes sdk             -- index for looking up 
            posibles = getRealPosibles index sdk             -- posibles     
 
 -- taking a list of sodukus for each one:
@@ -120,7 +121,7 @@ solve sodokus solutions
    | solutions /= []  = solutions
    | hasZeros sodokus = solve nextGeneration sols
    | sodokus == []    = []
-   where  nextGeneration = concat [ nextStep sdk | sdk <-sodokus]
+   where  nextGeneration = concat [nextStep1 sdk | sdk <-sodokus]
           sols           = filter isSolution nextGeneration
           hasZeros  sdks = any (==True) $ map (any (==0)) sdks
 
@@ -131,12 +132,32 @@ solve sodokus solutions
 -- Finish when empty if no solution
 -- Finish when no more empty sodokus
 solve' sodokus solutions 
-   | solutions /= []  = solutions
    | hasZeros sodokus = solve nextGeneration sols
    | sodokus == []    = []  
    where  nextGeneration = concat [ nextStep2 sdk | sdk <-sodokus]
           sols           = filter isSolution nextGeneration
           hasZeros  sdks = any (==True) $ map (any (==0)) sdks
+-- =====================================================================
+--                        SOLVING WITH A DEEP SEARCH
+-- try other recursion structure for solving the problem 
+solve_Recursion :: Soduku -> Soduku
+solve_Recursion sdk          = solveSingle sdk
+-- Solve Single
+solveSingle :: Soduku -> Soduku
+solveSingle sdk                                   -- Solving in single case
+     | isSolution sdk = sdk                       -- if is a solution ok
+     | otherwise      = solveList (nextStep2 sdk) -- if not generate all posibles children
+
+--Solve a lista
+solveList :: [Soduku] -> Soduku
+solveList  listaSdk
+     | listaSdk == [] = []                
+     | otherwise      = if not (try == []) then try else solveList (tail listaSdk) 
+	 where  try   = solveSingle (head listaSdk)
+
+-- =====================================================================   
+
+solutions sodoku = solve' [sodoku] []
             
 -- given index sdk structure and new value 
 -- obtain a new sdk structure with that value in specific position

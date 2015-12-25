@@ -57,7 +57,8 @@ tests = [
            , testCase "posibles values "         $ getRealPosibles  0 pre_sol_bd1_0  @?= [2]
            , testCase "posibles values "         $ getRealPosibles 33 pre_sol_bd1_2  @?= [7]
            , testCase "Minimal solution "        test_Solution_0   
-           , testCase "Minimal solution "        test_Solution_1          
+           , testCase "Minimal solution "        test_Solution_1
+           , testCase "Base condition for solve' " $ solve' [] [] @?= []           
            ]  
         ]                
 -- Caso de prueba para ver si detecta las soluciones.
