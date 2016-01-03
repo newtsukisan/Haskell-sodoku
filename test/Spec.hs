@@ -42,7 +42,10 @@ tests = [
            , testProperty "Reciprocidad" prop_testing_Index
            , testCase "areEquals" test_areEaquals_0
            , testCase "areEquals" test_areEaquals_1
-           , testCase "areEquals" test_areEaquals_2 
+           , testCase "areEquals" test_areEaquals_2
+           , testCase "areEquals" test_areEaquals_3
+           , testCase "areEquals" test_areEaquals_4
+           , testCase "areEquals" test_areEaquals_5                                                          
            , testCase "indexes of cero elements 0" test_getZeroIndexes_0
            , testCase "indexes of cero elements 1" test_getPosibilities_0
            , testCase "set first Element" $ setElement 0 [1..5] 111 @?= [111,2,3,4,5]  -- index zero
@@ -75,9 +78,12 @@ test_getElement_2 = getElement sol_bd1 1 4 @?= 2
 -- Testing get columns of a soduku representation
 test_getCols_0   = getCols sol_bd1   @?= columnas_sol_bd1
 --Testing are equals
-test_areEaquals_0 = areEquals [1..10]           @?= True
-test_areEaquals_1 = areEquals [1,3,4,6,6,6,2,0] @?= False
-test_areEaquals_2 = areEquals [1,3,3,4,6,6,2,0] @?= False 
+test_areEaquals_0 = areEquals  [1..10]           @?= True
+test_areEaquals_1 = areEquals  [1,3,4,6,6,6,2,0] @?= False
+test_areEaquals_2 = areEquals  [1,3,3,4,6,6,2,0] @?= False
+test_areEaquals_3 = notEquals' [1..10]           @?= True
+test_areEaquals_4 = notEquals' [1,3,4,6,6,6,2,0] @?= False
+test_areEaquals_5 = notEquals' [1,3,3,4,6,6,2,0] @?= False                                                   
 --testing getZeroIndexes 
 test_getZeroIndexes_0 = getZeroIndexes [1,2,0,0,9] @?= [2,3]
 --testing posibilities

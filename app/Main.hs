@@ -3,15 +3,15 @@ module Main where
 import Lib
 b = 0
 bd1  = [ 
-          2, 7, 4, b, 9, 1, b, b, 5
-        , 1, b, b, 5, b, b, b, 9, b
-        , 6, b, b, b, b, 3, 2, 8, b
-        , b, b, 1, 9, b, b, b, b, 8 
-        , b, b, 5, 1, b, b, 6, b, b
-        , 7, b, b, b, 8, b, b, b, 3
-        , 4, b, 2, b, b, b, b, b, 9
+          b, b, b, b, b, b, b, b, b
+        , 1, b, b, b, b, b, b, b, b
+        , b, b, b, b, b, b, b, b, b
+        , b, b, b, b, b, b, b, b, b 
+        , b, b, b, b, b, b, b, b, b
+        , b, b, b, b, b, b, b, b, b
+        , b, b, b, b, b, b, b, b, b
         , b, b, b, b, b, b, b, 7, b
-        , 8, b, b, 3, 4, 9, b, b, b]  :: Soduku
+        , 8, b, b, b, b, b, b, b, b]  :: Soduku
 
 pre_sol_bd1_2 = [
             0,7,4,8,9,1,3,6,5       -- two step from solution

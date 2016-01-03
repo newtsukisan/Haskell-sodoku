@@ -34,8 +34,8 @@ isSolution sdk = noempty && isValid sdk
 -- without zeros all elements in a sodoku must be diferent in each row and in each column
 isValid :: Soduku -> Bool
 isValid sdk =  rowsWell && colsWell
-  where rowsWell =  all (==True) $  map notEquals rows   -- in all rows elements are diferents
-        colsWell =  all (==True) $  map notEquals cols   -- in all colums elements are diferents
+  where rowsWell =  all (==True) $  map notEquals' rows  -- in all rows elements are diferents
+        colsWell =  all (==True) $  map notEquals' cols  -- in all colums elements are diferents
         rows     = map (filter (/=0)) (getRows sdk)      -- taking off zeros
         cols     = map (filter (/=0)) (getCols sdk)      -- taking off zeros
 
@@ -46,6 +46,10 @@ areEquals lista = (length $ filter (\ [x,y] -> x == y) $ duplas lista) == 0   --
 -- negate areEquals for simplicity
 notEquals  :: [Int] -> Bool
 notEquals lista = areEquals lista
+-- Check if all elements of a list are diferents
+notEquals' :: [Int] -> Bool
+notEquals' [] = True                                 -- Caso base
+notEquals' (x:xs) = notElem x xs && notEquals' xs    -- Natural recursion 
 -- Obtain col and row index from index of list
 getRindex :: Index -> Row
 getRindex index  = index `div` 9
@@ -153,7 +157,7 @@ solveList :: [Soduku] -> Soduku
 solveList  listaSdk
      | listaSdk == [] = []                
      | otherwise      = if not (try == []) then try else solveList (tail listaSdk) 
-	 where  try   = solveSingle (head listaSdk)
+     where  try   = solveSingle (head listaSdk)
 
 -- =====================================================================   
 
