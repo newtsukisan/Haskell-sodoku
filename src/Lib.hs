@@ -12,9 +12,8 @@ type Col     = Int
 type Index   = Int
 type Rows    = [Int]
 type Cols    = [Int] 
-{-La idea es crear una estructura que nos permita resolver un soduko.
-Cada uno de las filas y de las columnas tiene que contener solo una vez cada una de las cifras.
--} 
+
+ 
 dupla_0          :: [Int] -> [[Int]]
 dupla_0 (x:xs)   = [[x,y] | y <- xs]
 duplas           :: [Int] -> [[Int]]
