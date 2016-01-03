@@ -5,8 +5,7 @@ module Lib
 --import Data.Set (Set)
 import qualified Data.Set as Set
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+
 type Soduku  = [Int]
 type Row     = Int
 type Col     = Int
